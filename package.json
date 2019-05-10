@@ -1,0 +1,9 @@
+{
+  "name": "deserialize-json-api",
+  "version": "1.0.0",
+  "description": "Deserializes JSON:API compliant json into a flat object",
+  "main": "lib/index.js",
+  "repository": "https://github.com/weilandia/deserialize-json-api",
+  "author": "Nick Weiland <nickweiland@gmail.com>",
+  "license": "MIT"
+}
