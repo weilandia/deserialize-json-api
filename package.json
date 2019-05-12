@@ -4,6 +4,26 @@
   "description": "Deserializes JSON:API compliant json into a flat object",
   "main": "lib/index.js",
   "repository": "https://github.com/weilandia/deserialize-json-api",
-  "author": "Nick Weiland <nickweiland@gmail.com>",
-  "license": "MIT"
+  "author": "weilandia",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack --watch",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.2.0",
+    "babel-loader": "^8.0.4",
+    "core-js": "2",
+    "jest": "^24.8.0",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2"
+  },
+  "keywords": [
+    "react",
+    "ActionCable",
+    "hooks"
+  ]
 }
