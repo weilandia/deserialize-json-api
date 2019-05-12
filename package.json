@@ -1,7 +1,7 @@
 {
   "name": "deserialize-json-api",
   "version": "1.0.0",
-  "description": "Deserializes JSON:API compliant json into a flat object",
+  "description": "Immutable json:api deserializer",
   "main": "lib/index.js",
   "repository": "https://github.com/weilandia/deserialize-json-api",
   "author": "weilandia",
@@ -22,9 +22,9 @@
     "webpack-cli": "^3.1.2"
   },
   "keywords": [
-    "react",
-    "ActionCable",
-    "hooks"
+    "json:api",
+    "jsonapi",
+    "deserialize"
   ],
   "dependencies": {}
 }
