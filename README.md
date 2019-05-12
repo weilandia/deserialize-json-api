@@ -1,7 +1,7 @@
 # 🥣 deserialize-json-api
 Immutable json:api deserializer
 
-* [json:api spec compliant](https://jsonapi.org/)
+* [{json:api} spec](https://jsonapi.org/) compliant
 * maps included objects to resources
 * does not mutate original response object
 
