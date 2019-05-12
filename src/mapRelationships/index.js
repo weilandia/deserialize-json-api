@@ -13,7 +13,7 @@ const deserializeIncluded = (rel, included) => {
     resource = mapRelationships(resource, included);
   }
 
-  return flattenAttributes(resource);
+  return { ...rel, ...flattenAttributes(resource)};
 };
 
 export const mapRelationships = (resource, included) => {

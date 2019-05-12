@@ -94,7 +94,7 @@ describe('mapRelationships', () => {
     expect.assertions(2)
 
     const result = mapRelationships(resource, included);
-    console.log(result);
+
     expect(resource).not.toEqual(result);
     expect(result).toEqual(expectedResponse);
   })
