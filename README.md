@@ -12,7 +12,7 @@ yarn add deserialize-json-api
 ```js
 import { deserialize } from 'deserialize-json-api';
 
-const bodie = {
+const body = {
   data: {
     id: 1,
     type: 'movie',
