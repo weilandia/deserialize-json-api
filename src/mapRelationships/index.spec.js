@@ -98,4 +98,29 @@ describe('mapRelationships', () => {
     expect(resource).not.toEqual(result);
     expect(result).toEqual(expectedResponse);
   })
+
+  it('does not map unincluded relationships', async () => {
+    expect.assertions(2)
+
+    const singleIncluded = [
+      {
+        type: 'actor',
+        id: 1,
+        attributes: { name: 'John', age: 80 }
+      }
+    ];
+
+    const result = mapRelationships(resource, singleIncluded);
+    const resp = {
+      id: 1,
+      type: 'movie',
+      name: 'test movie',
+      year: 2014,
+      locations: ['SF'],
+      actors: [ { id: 1, type: 'actor', name: 'John', age: 80 } ]
+    };
+
+    expect(resource).not.toEqual(result);
+    expect(result).toEqual(resp);
+  });
 });
