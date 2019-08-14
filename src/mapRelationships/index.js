@@ -8,13 +8,16 @@ const findResource = (rel, included) => {
 
 const deserializeIncluded = (rel, included) => {
   let resource = findResource(rel, included);
-  if (!resource) return;
+  if (!resource) return [];
 
-  if (resource.relationships) {
-    resource = mapRelationships(resource, included);
-  }
+  const filteredIncluded = included.map(res => {
+    if (res !== resource) return res;
 
-  return { ...rel, ...flattenAttributes(resource)};
+    const { relationships, ...filter } = resource;
+    return filter;
+  })
+
+  return [{ ...rel, ...flattenAttributes(resource) }, filteredIncluded];
 };
 
 export const mapRelationships = (resource, included) => {
@@ -33,13 +36,16 @@ export const mapRelationships = (resource, included) => {
     if (relData && Array.isArray(relData)) {
       let includedRels = [];
       relData.forEach(rel => {
-        const dRel = deserializeIncluded(rel, included);
+        let dRel;
+        [dRel, included] = deserializeIncluded(rel, included);
         if (dRel) includedRels.push(dRel);
       });
 
+      includedRels = includedRels.map(rel => mapRelationships(rel, included));
+
       if (includedRels.length) deserializedRel = includedRels;
     } else if (relData) {
-      deserializedRel = deserializeIncluded(relData, included)
+      [deserializedRel] = deserializeIncluded(relData, included)
     }
 
     if (deserializedRel) result[key] = deserializedRel;
