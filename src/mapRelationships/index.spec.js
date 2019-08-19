@@ -27,6 +27,9 @@ const resource = {
     },
     name: {
       data: { id: 1, type: 'name' }
+    },
+    studio: {
+      data: { id: 1, type: 'studio' }
     }
   }
 };
@@ -63,6 +66,18 @@ const included = [
     type: 'name',
     id: 1,
     title: 'Stargate'
+  },
+  {
+    type: 'studio',
+    id: 1,
+    title: 'Studio R',
+    relationships: {
+      awards: {
+        data: [
+          { id: 4, type: 'award' }
+        ]
+      }
+    }
   }
 ];
 
@@ -101,7 +116,20 @@ const expectedResponse = {
       type: 'Oscar',
       category: 'Best director'
     }
-  ]
+  ],
+  studio: {
+    type: 'studio',
+    id: 1,
+    title: 'Studio R',
+    awards: [
+      {
+        type: 'award',
+        id: 4,
+        type: 'Oscar',
+        category: 'Best director'
+      }
+    ]
+  }
 }
 
 const circularReference = {
