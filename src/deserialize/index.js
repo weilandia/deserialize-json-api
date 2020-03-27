@@ -1,7 +1,7 @@
-import { flattenAttributes } from '../flattenAttributes'
 import { mapRelationships } from '../mapRelationships'
+import { toCamelLower } from "../toCamelLower"
 
-export const deserialize = (resp) => {
+export const deserialize = (resp, options) => {
   const { data = {}, included, ...rest } = resp;
   let deserialized;
 
@@ -11,5 +11,11 @@ export const deserialize = (resp) => {
     deserialized = mapRelationships(data, included);
   }
 
+  if (options) {
+    if(Object.prototype.hasOwnProperty.call(options, 'setKeyTransform')) {
+      toCamelLower(deserialized);
+    }
+  }
+  
   return { data: deserialized, ...rest };
 }

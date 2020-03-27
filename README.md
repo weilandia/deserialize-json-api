@@ -90,6 +90,20 @@ JSON.stringify(deserializedData) ===  JSON.stringify(
 )
 ```
 
+## Options
+#### camelCase
+If you would like to have your object key `camelCased` you can pass an option:
+
+```javascript
+const result = deserialize(body, {convertsToCamelCase: true});
+```
+
+Currently the package will look for `-` and `_` characters and transform it into camelCase.
+```
+first-name -> firstName
+first_name -> firstName
+``` 
+
 ## Contributing
 
 1. Fork it
