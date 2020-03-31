@@ -240,10 +240,10 @@ describe('deserialize', () => {
     expect(resp).toEqual(resp);
     expect(result).toEqual(expectedArrayResponse);
   })
-  
+
   it('deserializes and camel case the object keys', () => {
-    const result = deserialize(respWithSeparators, {setKeyTransform: true});
-    
+    const result = deserialize(respWithSeparators, { transformKeys: 'camelCase' });
+
     expect(result).toEqual(expectRespWithSeparators);
   })
 });

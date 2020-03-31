@@ -1,7 +1,7 @@
 import { mapRelationships } from '../mapRelationships'
-import { toCamelLower } from "../toCamelLower"
+import { transformKeys } from "../transformKeys"
 
-export const deserialize = (resp, options) => {
+export const deserialize = (resp, options = {}) => {
   const { data = {}, included, ...rest } = resp;
   let deserialized;
 
@@ -11,11 +11,7 @@ export const deserialize = (resp, options) => {
     deserialized = mapRelationships(data, included);
   }
 
-  if (options) {
-    if(Object.prototype.hasOwnProperty.call(options, 'setKeyTransform')) {
-      toCamelLower(deserialized);
-    }
-  }
-  
+  transformKeys(deserialized, options);
+
   return { data: deserialized, ...rest };
 }
