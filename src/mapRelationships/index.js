@@ -1,21 +1,21 @@
-import { flattenAttributes } from '../flattenAttributes'
+import { flattenAttributes } from "../flattenAttributes";
 
 const findResource = (rel, included) => {
   if (!Array.isArray(included)) return;
 
-  return included.find(res => res.id === rel.id && res.type === rel.type);
-}
+  return included.find((res) => res.id === rel.id && res.type === rel.type);
+};
 
 const deserializeIncluded = (rel, included) => {
   let resource = findResource(rel, included);
   if (!resource) return [];
 
-  const filteredIncluded = included.map(res => {
+  const filteredIncluded = included.map((res) => {
     if (res !== resource) return res;
 
     const { relationships, ...filter } = resource;
     return filter;
-  })
+  });
 
   return [{ ...rel, ...flattenAttributes(resource) }, filteredIncluded];
 };
@@ -23,7 +23,7 @@ const deserializeIncluded = (rel, included) => {
 export const mapRelationships = (resource, included) => {
   let { relationships, ...result } = resource;
 
-  if (resource.hasOwnProperty('attributes')) {
+  if (resource.hasOwnProperty("attributes")) {
     result = flattenAttributes(result);
   }
 
@@ -35,17 +35,17 @@ export const mapRelationships = (resource, included) => {
 
     if (relData && Array.isArray(relData)) {
       let includedRels = [];
-      relData.forEach(rel => {
+      relData.forEach((rel) => {
         let dRel;
         [dRel, included] = deserializeIncluded(rel, included);
         if (dRel) includedRels.push(dRel);
       });
 
-      includedRels = includedRels.map(rel => mapRelationships(rel, included));
+      includedRels = includedRels.map((rel) => mapRelationships(rel, included));
 
       if (includedRels.length) deserializedRel = includedRels;
     } else if (relData) {
-      const [dRel] = deserializeIncluded(relData, included)
+      const [dRel] = deserializeIncluded(relData, included);
       if (dRel) {
         deserializedRel = mapRelationships(dRel, included);
       }
@@ -55,4 +55,4 @@ export const mapRelationships = (resource, included) => {
   }
 
   return result;
-}
+};

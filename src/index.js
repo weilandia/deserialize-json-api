@@ -1,3 +1,3 @@
-import { deserialize } from './deserialize';
+import { deserialize } from "./deserialize";
 
 export { deserialize };

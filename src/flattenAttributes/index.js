@@ -3,9 +3,9 @@ const asAttributes = ({ attributes, ...rest }) => {
   return { ...rest, ...attributes };
 };
 
-export const flattenAttributes = data => {
-  if (!data || typeof data !== 'object') return {};
+export const flattenAttributes = (data) => {
+  if (!data || typeof data !== "object") return {};
 
-  if (Array.isArray(data)) return data.map(el => asAttributes(el));
+  if (Array.isArray(data)) return data.map((el) => asAttributes(el));
   return asAttributes(data);
-}
+};

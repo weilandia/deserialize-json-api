@@ -1,253 +1,245 @@
-import { mapRelationships } from './index.js'
+import { mapRelationships } from "./index.js";
 
 const resource = {
   id: 1,
-  type: 'movie',
+  type: "movie",
   attributes: {
-    name: 'test movie',
+    name: "test movie",
     year: 2014,
-    locations: ['SF']
+    locations: ["SF"],
   },
   relationships: {
     actors: {
       data: [
-        { id: 1, type: 'actor' },
-        { id: 2, type: 'actor' }
-      ]
+        { id: 1, type: "actor" },
+        { id: 2, type: "actor" },
+      ],
     },
     awards: {
-      data: [
-        { id: 4, type: 'award' }
-      ]
+      data: [{ id: 4, type: "award" }],
     },
     locations: {
-      data: [
-        { id: 1, type: 'location' }
-      ]
+      data: [{ id: 1, type: "location" }],
     },
     name: {
-      data: { id: 1, type: 'name' }
+      data: { id: 1, type: "name" },
     },
     studio: {
-      data: { id: 1, type: 'studio' }
-    }
-  }
+      data: { id: 1, type: "studio" },
+    },
+  },
 };
 
 const included = [
   {
-    type: 'actor',
+    type: "actor",
     id: 1,
-    attributes: { name: 'John', age: 80 },
+    attributes: { name: "John", age: 80 },
     relationships: {
       awards: {
-        data: [
-          { id: 4, type: 'award' }
-        ]
-      }
-    }
+        data: [{ id: 4, type: "award" }],
+      },
+    },
   },
   {
-    type: 'actor',
+    type: "actor",
     id: 2,
-    attributes: { name: 'Jenn', age: 40 }
+    attributes: { name: "Jenn", age: 40 },
   },
   {
-    type: 'award',
+    type: "award",
     id: 4,
-    attributes: { type: 'Oscar', category: 'Best director'}
+    attributes: { type: "Oscar", category: "Best director" },
   },
   {
-    type: 'location',
+    type: "location",
     id: 1,
-    name: 'LA'
+    name: "LA",
   },
   {
-    type: 'name',
+    type: "name",
     id: 1,
-    title: 'Stargate'
+    title: "Stargate",
   },
   {
-    type: 'studio',
+    type: "studio",
     id: 1,
-    title: 'Studio R',
+    title: "Studio R",
     relationships: {
       awards: {
-        data: [
-          { id: 4, type: 'award' }
-        ]
-      }
-    }
-  }
+        data: [{ id: 4, type: "award" }],
+      },
+    },
+  },
 ];
 
 const expectedResponse = {
   id: 1,
-  type: 'movie',
-  name: 'test movie',
+  type: "movie",
+  name: "test movie",
   year: 2014,
-  locations: ['SF'],
+  locations: ["SF"],
   actors: [
     {
-      type: 'actor',
+      type: "actor",
       id: 1,
-      name: 'John',
+      name: "John",
       age: 80,
       awards: [
         {
-          type: 'award',
+          type: "award",
           id: 4,
-          type: 'Oscar',
-          category: 'Best director'
-        }
-      ]
+          type: "Oscar",
+          category: "Best director",
+        },
+      ],
     },
     {
-      type: 'actor',
+      type: "actor",
       id: 2,
-      name: 'Jenn',
-      age: 40
-    }
+      name: "Jenn",
+      age: 40,
+    },
   ],
   awards: [
     {
-      type: 'award',
+      type: "award",
       id: 4,
-      type: 'Oscar',
-      category: 'Best director'
-    }
+      type: "Oscar",
+      category: "Best director",
+    },
   ],
   studio: {
-    type: 'studio',
+    type: "studio",
     id: 1,
-    title: 'Studio R',
+    title: "Studio R",
     awards: [
       {
-        type: 'award',
+        type: "award",
         id: 4,
-        type: 'Oscar',
-        category: 'Best director'
-      }
-    ]
-  }
-}
+        type: "Oscar",
+        category: "Best director",
+      },
+    ],
+  },
+};
 
 const circularReference = {
   data: {
     id: 1,
-    type: 'profile',
+    type: "profile",
     relationships: {
       movies: {
         data: [
           {
-            id: '1046',
-            type: 'movie'
+            id: "1046",
+            type: "movie",
           },
           {
-            id: '1000',
-            type: 'movie'
-          }
-        ]
-      }
-    }
+            id: "1000",
+            type: "movie",
+          },
+        ],
+      },
+    },
   },
   included: [
     {
-      id: '1046',
-      type: 'movie',
+      id: "1046",
+      type: "movie",
       relationships: {
         actors: {
           data: [
             {
-              id: '93',
-              type: 'actor'
-            }
-          ]
-        }
-      }
+              id: "93",
+              type: "actor",
+            },
+          ],
+        },
+      },
     },
     {
-      id: '1000',
-      type: 'movie',
+      id: "1000",
+      type: "movie",
       relationships: {
         actors: {
           data: [
             {
-              id: '93',
-              type: 'actor'
-            }
-          ]
-        }
-      }
+              id: "93",
+              type: "actor",
+            },
+          ],
+        },
+      },
     },
     {
-      id: '93',
-      type: 'actor',
+      id: "93",
+      type: "actor",
       relationships: {
         movies: {
           data: [
             {
-              id: '1046',
-              type: 'movie'
+              id: "1046",
+              type: "movie",
             },
             {
-              id: '1000',
-              type: 'movie'
+              id: "1000",
+              type: "movie",
             },
-          ]
-        }
-      }
-    }
-  ]
-}
+          ],
+        },
+      },
+    },
+  ],
+};
 
 const circularReferenceExpectedResponse = {
   id: 1,
-  type: 'profile',
+  type: "profile",
   movies: [
     {
-      id: '1046',
-      type: 'movie',
+      id: "1046",
+      type: "movie",
       actors: [
         {
-          id: '93',
-          type: 'actor',
+          id: "93",
+          type: "actor",
           movies: [
-            { id: '1046', type: 'movie' },
-            { id: '1000', type: 'movie' }
-          ]
-        }
-      ]
+            { id: "1046", type: "movie" },
+            { id: "1000", type: "movie" },
+          ],
+        },
+      ],
     },
     {
-      id: '1000',
-      type: 'movie',
+      id: "1000",
+      type: "movie",
       actors: [
         {
-          id: '93',
-          type: 'actor',
+          id: "93",
+          type: "actor",
           movies: [
-            { id: '1046', type: 'movie' },
-            { id: '1000', type: 'movie' }
-          ]
-        }
-      ]
-    }
-  ]
-}
+            { id: "1046", type: "movie" },
+            { id: "1000", type: "movie" },
+          ],
+        },
+      ],
+    },
+  ],
+};
 
-describe('mapRelationships', () => {
-  it('properly maps relationships', async () => {
-    expect.assertions(2)
+describe("mapRelationships", () => {
+  it("properly maps relationships", async () => {
+    expect.assertions(2);
 
     const result = mapRelationships(resource, included);
 
     expect(resource).not.toEqual(result);
     expect(result).toEqual(expectedResponse);
-  })
+  });
 
-  it('properly maps relationships with circular references', async () => {
-    expect.assertions(2)
+  it("properly maps relationships with circular references", async () => {
+    expect.assertions(2);
 
     const { data: resource, included } = circularReference;
 
@@ -255,28 +247,27 @@ describe('mapRelationships', () => {
 
     expect(resource).not.toEqual(result);
     expect(result).toEqual(circularReferenceExpectedResponse);
-  })
+  });
 
-
-  it('does not map unincluded relationships', async () => {
-    expect.assertions(2)
+  it("does not map unincluded relationships", async () => {
+    expect.assertions(2);
 
     const singleIncluded = [
       {
-        type: 'actor',
+        type: "actor",
         id: 1,
-        attributes: { name: 'John', age: 80 }
-      }
+        attributes: { name: "John", age: 80 },
+      },
     ];
 
     const result = mapRelationships(resource, singleIncluded);
     const resp = {
       id: 1,
-      type: 'movie',
-      name: 'test movie',
+      type: "movie",
+      name: "test movie",
       year: 2014,
-      locations: ['SF'],
-      actors: [ { id: 1, type: 'actor', name: 'John', age: 80 } ]
+      locations: ["SF"],
+      actors: [{ id: 1, type: "actor", name: "John", age: 80 }],
     };
 
     expect(resource).not.toEqual(result);
