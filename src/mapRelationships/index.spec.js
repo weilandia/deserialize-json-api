@@ -228,6 +228,50 @@ const circularReferenceExpectedResponse = {
   ],
 };
 
+const resourceMissingIncluded = {
+  data: {
+    id: 1,
+    type: "movie",
+    attributes: {
+      name: "test movie",
+      year: 2014,
+      locations: ["SF"],
+    },
+    relationships: {
+      actors: {
+        data: [
+          { id: 1, type: "actor" },
+          { id: 2, type: "actor" },
+        ],
+      },
+      awards: {
+        data: [{ id: 4, type: "award" }],
+      },
+      locations: {
+        data: [{ id: 1, type: "location" }],
+      },
+      name: {
+        data: { id: 1, type: "name" },
+      },
+      studio: {
+        data: { id: 1, type: "studio" },
+      },
+    },
+  },
+  included: [
+    {
+      type: "studio",
+      id: 1,
+      title: "Studio R",
+      relationships: {
+        awards: {
+          data: [{ id: 4, type: "award" }],
+        },
+      },
+    },
+  ],
+};
+
 describe("mapRelationships", () => {
   it("properly maps relationships", async () => {
     expect.assertions(2);
@@ -268,6 +312,28 @@ describe("mapRelationships", () => {
       year: 2014,
       locations: ["SF"],
       actors: [{ id: 1, type: "actor", name: "John", age: 80 }],
+    };
+
+    expect(resource).not.toEqual(result);
+    expect(result).toEqual(resp);
+  });
+
+  it("try to map every included relationship", async () => {
+    expect.assertions(2);
+
+    const { data: resource, included } = resourceMissingIncluded;
+    const result = mapRelationships(resource, included);
+    const resp = {
+      id: 1,
+      type: "movie",
+      name: "test movie",
+      year: 2014,
+      locations: ["SF"],
+      studio: {
+        type: "studio",
+        id: 1,
+        title: "Studio R",
+      },
     };
 
     expect(resource).not.toEqual(result);

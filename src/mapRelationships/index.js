@@ -8,7 +8,7 @@ const findResource = (rel, included) => {
 
 const deserializeIncluded = (rel, included) => {
   let resource = findResource(rel, included);
-  if (!resource) return [];
+  if (!resource) return [undefined, included];
 
   const filteredIncluded = included.map((res) => {
     if (res !== resource) return res;
