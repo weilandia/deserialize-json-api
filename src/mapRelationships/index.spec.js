@@ -228,6 +228,61 @@ const circularReferenceExpectedResponse = {
   ],
 };
 
+const circularReferenceWithOneRelationships = {
+  data: {
+    id: 1,
+    type: "profile",
+    relationships: {
+      favoriteMovie: {
+        data: {
+          id: "1046",
+          type: "movie",
+        },
+      },
+    },
+  },
+  included: [
+    {
+      id: "1046",
+      type: "movie",
+      relationships: {
+        mainActor: {
+          data: {
+            id: "93",
+            type: "actor",
+          },
+        },
+      },
+    },
+    {
+      id: "93",
+      type: "actor",
+      relationships: {
+        topMovie: {
+          data: {
+            id: "1046",
+            type: "movie",
+          },
+        },
+      },
+    },
+  ],
+};
+
+const circularReferenceWithOneRelationshipsExpectedResponse = {
+  id: 1,
+  type: "profile",
+  favoriteMovie: {
+    id: "1046",
+    type: "movie",
+    mainActor: {
+      id: "93",
+      type: "actor",
+      topMovie: { id: "1046", type: "movie" },
+    }
+  },
+};
+
 const resourceMissingIncluded = {
   data: {
     id: 1,
@@ -291,6 +346,17 @@ describe("mapRelationships", () => {
 
     expect(resource).not.toEqual(result);
     expect(result).toEqual(circularReferenceExpectedResponse);
+  });
+
+  it("properly maps one-relationships with circular references in the includes", async () => {
+    expect.assertions(2);
+
+    const { data: resource, included } = circularReferenceWithOneRelationships;
+
+    const result = mapRelationships(resource, included);
+
+    expect(resource).not.toEqual(result);
+    expect(result).toEqual(circularReferenceWithOneRelationshipsExpectedResponse);
   });
 
   it("does not map unincluded relationships", async () => {
