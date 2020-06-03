@@ -45,9 +45,9 @@ export const mapRelationships = (resource, included) => {
 
       if (includedRels.length) deserializedRel = includedRels;
     } else if (relData) {
-      const [dRel] = deserializeIncluded(relData, included);
+      const [dRel, filteredIncluded] = deserializeIncluded(relData, included);
       if (dRel) {
-        deserializedRel = mapRelationships(dRel, included);
+        deserializedRel = mapRelationships(dRel, filteredIncluded);
       }
     }
 
