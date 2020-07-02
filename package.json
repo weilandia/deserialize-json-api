@@ -6,7 +6,6 @@
   "repository": "https://github.com/weilandia/deserialize-json-api",
   "author": "weilandia",
   "license": "MIT",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "scripts": {
     "build": "webpack",
     "dev": "webpack --watch",
