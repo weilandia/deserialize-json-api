@@ -7,6 +7,8 @@ export const deserialize = (resp, options = {}) => {
 
   if (Array.isArray(data)) {
     deserialized = data.map((resource) => mapRelationships(resource, included));
+  } else if (data === null) {
+    deserialized = null;
   } else {
     deserialized = mapRelationships(data, included);
   }

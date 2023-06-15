@@ -205,6 +205,10 @@ const expectRespWithSeparators = {
   errors: [{ title: "Error!" }],
 };
 
+const nullResp = {
+  data: null,
+};
+
 const util = require("util");
 
 describe("deserialize", () => {
@@ -215,6 +219,14 @@ describe("deserialize", () => {
 
     expect(resp).not.toEqual(result);
     expect(result).toEqual(expectedResponse);
+  });
+
+  it("deserializes null resource", async () => {
+    expect.assertions(1);
+
+    const result = deserialize(nullResp);
+
+    expect(nullResp).toEqual(result);
   });
 
   it("deserializes an array of resources", async () => {
