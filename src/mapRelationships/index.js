@@ -33,7 +33,9 @@ export const mapRelationships = (resource, included) => {
     const relData = relationships[key].data;
     let deserializedRel;
 
-    if (relData && Array.isArray(relData)) {
+    if (relData && Array.isArray(relData) && relData.length === 0) {
+      deserializedRel = [];
+    } else if (relData && Array.isArray(relData)) {
       let includedRels = [];
       relData.forEach((rel) => {
         let dRel;

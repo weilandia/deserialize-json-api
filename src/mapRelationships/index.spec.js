@@ -27,6 +27,9 @@ const resource = {
     studio: {
       data: { id: 1, type: "studio" },
     },
+    labels: {
+      data: [],
+    },
   },
 };
 
@@ -122,6 +125,7 @@ const expectedResponse = {
       },
     ],
   },
+  labels: []
 };
 
 const circularReference = {
@@ -378,6 +382,7 @@ describe("mapRelationships", () => {
       year: 2014,
       locations: ["SF"],
       actors: [{ id: 1, type: "actor", name: "John", age: 80 }],
+      labels: []
     };
 
     expect(resource).not.toEqual(result);
