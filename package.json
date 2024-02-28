@@ -1,6 +1,6 @@
 {
   "name": "deserialize-json-api",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Immutable json:api deserializer",
   "main": "lib/index.js",
   "repository": "https://github.com/weilandia/deserialize-json-api",
