@@ -1,5 +1,10 @@
 # 🥣 deserialize-json-api
 
+⚠️⚠️⚠️
+We no longer use this lib at [Govly](https://www.govly.com) and it is not actively maintained.
+New maintainers welcome.
+⚠️⚠️⚠️
+
 Immutable json:api deserializer
 
 - [{json:api} spec](https://jsonapi.org/) compliant
