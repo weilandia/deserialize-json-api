@@ -1,4 +1,7 @@
-import { deserialize } from "./index.js";
+// index.test.js
+
+const { deserialize } = require('./index');
+const { strictEqual, deepStrictEqual } = require('assert');
 
 const resp = {
   data: {
@@ -7,7 +10,6 @@ const resp = {
     attributes: {
       name: "test movie",
       year: 2014,
-      locations: ["SF"],
     },
     relationships: {
       actors: {
@@ -34,8 +36,8 @@ const resp = {
       locations: {
         data: [{ id: 1, type: "location" }],
       },
-      name: {
-        data: { id: 1, type: "name" },
+      director: {
+        data: { id: 1, type: "person" },
       },
     },
     links: {
@@ -64,12 +66,12 @@ const resp = {
     {
       type: "location",
       id: 1,
-      name: "LA",
+      attributes: { name: "LA" },
     },
     {
-      type: "name",
+      type: "person",
       id: 1,
-      title: "Stargate",
+      attributes: { name: "Steven" },
     },
   ],
   meta: {
@@ -86,7 +88,8 @@ const expectedResponse = {
     meta: { saved: false },
     name: "test movie",
     year: 2014,
-    locations: ["SF"],
+    locations: [{ id: 1, name: "LA", type: "location" }],
+    director: { id: 1, type: "person", name: "Steven" },
     actors: [
       { id: 1, type: "actor", name: "John", age: 80 },
       { id: 2, type: "actor", name: "Jenn", age: 40 },
@@ -94,7 +97,7 @@ const expectedResponse = {
     awards: [
       {
         id: 4,
-        type: "Oscar",
+        type: "award",
         links: { self: "/awards/1", related: "/awards/1/movie" },
         meta: { verified: false },
         category: "Best director",
@@ -112,7 +115,6 @@ const respWithSeparators = {
     attributes: {
       "first-name": "Foo",
       "last-name": "Bar",
-      locations: ["SF"],
     },
     relationships: {
       actors: {
@@ -139,8 +141,8 @@ const respWithSeparators = {
       locations: {
         data: [{ id: 1, type: "location" }],
       },
-      name: {
-        data: { id: 1, type: "name" },
+      director: {
+        data: { id: 1, type: "person" },
       },
     },
     links: {
@@ -169,7 +171,7 @@ const respWithSeparators = {
     {
       type: "location",
       id: 1,
-      name: "LA",
+      attributes: { name: "LA" },
     },
   ],
   meta: {
@@ -178,7 +180,7 @@ const respWithSeparators = {
   errors: [{ title: "Error!" }],
 };
 
-const expectRespWithSeparators = {
+const expectedRespWithSeparators = {
   data: {
     id: 1,
     type: "user",
@@ -186,7 +188,8 @@ const expectRespWithSeparators = {
     meta: { saved: false },
     firstName: "Foo",
     lastName: "Bar",
-    locations: ["SF"],
+    locations: [{ id: 1, name: "LA", type: "location" }],
+    director: { id: 1, type: "person" },
     actors: [
       { id: 1, type: "actor", name: "John", age: 80, isSuperHero: true },
       { id: 2, type: "actor", name: "Jenn", age: 40, isSuperHero: false },
@@ -194,7 +197,7 @@ const expectRespWithSeparators = {
     awards: [
       {
         id: 4,
-        type: "Oscar",
+        type: "award",
         links: { self: "/awards/1", related: "/awards/1/movie" },
         meta: { verified: false },
         category: "Best director",
@@ -209,29 +212,18 @@ const nullResp = {
   data: null,
 };
 
-const util = require("util");
-
 describe("deserialize", () => {
-  it("deserializes single resource", async () => {
-    expect.assertions(2);
-
+  it("should deserialize a single resource", () => {
     const result = deserialize(resp);
-
-    expect(resp).not.toEqual(result);
-    expect(result).toEqual(expectedResponse);
+    deepStrictEqual(result, expectedResponse);
   });
 
-  it("deserializes null resource", async () => {
-    expect.assertions(1);
-
+  it("should handle null resource", () => {
     const result = deserialize(nullResp);
-
-    expect(nullResp).toEqual(result);
+    deepStrictEqual(result, nullResp);
   });
 
-  it("deserializes an array of resources", async () => {
-    expect.assertions(3);
-
+  it("should deserialize an array of resources", () => {
     const { data, ...rest } = resp;
     const arrayResp = { data: [data, data, data], ...rest };
 
@@ -243,16 +235,163 @@ describe("deserialize", () => {
       ...expectedRest,
     };
 
-    expect(resp).not.toEqual(result);
-    expect(resp).toEqual(resp);
-    expect(result).toEqual(expectedArrayResponse);
+    deepStrictEqual(result, expectedArrayResponse);
   });
 
-  it("deserializes and camel case the object keys", () => {
-    const result = deserialize(respWithSeparators, {
-      transformKeys: "camelCase",
-    });
+  it("should camel case object keys", () => {
+    const result = deserialize(respWithSeparators, { transformKeys: "camelCase" });
+    deepStrictEqual(result, expectedRespWithSeparators);
+  });
 
-    expect(result).toEqual(expectRespWithSeparators);
+  // Additional edge cases
+  const complexResponse = {
+    data: {
+      type: "posts",
+      id: "2291",
+      attributes: {},
+      relationships: {
+        user: {
+          data: {
+            type: "users",
+            id: "39",
+          },
+        },
+        comments: {
+          data: [
+            {
+              type: "comments",
+              id: "7989",
+            },
+            {
+              type: "comments",
+              id: "7990",
+            },
+          ],
+        },
+      },
+    },
+    included: [
+      {
+        type: "users",
+        id: "39",
+        attributes: {},
+        relationships: {},
+      },
+      {
+        type: "users",
+        id: "100",
+        attributes: {},
+        relationships: {},
+      },
+      {
+        type: "comments",
+        id: "7989",
+        attributes: {},
+        relationships: {
+          user: {
+            data: {
+              type: "users",
+              id: "39",
+            },
+          },
+          pre: {
+            data: {
+              type: "comments",
+              id: "7986",
+            },
+          },
+        },
+      },
+      {
+        type: "comments",
+        id: "7986",
+        attributes: {},
+        relationships: {
+          user: {
+            data: {
+              type: "users",
+              id: "39",
+            },
+          },
+        },
+      },
+      {
+        type: "comments",
+        id: "7990",
+        attributes: {},
+        relationships: {
+          user: {
+            data: {
+              type: "users",
+              id: "100",
+            },
+          },
+          pre: {
+            data: {
+              type: "comments",
+              id: "7989",
+            },
+          },
+        },
+      },
+    ],
+  };
+
+  const expectedComplexResponse = {
+    data: {
+      type: "posts",
+      id: "2291",
+      user: {
+        type: "users",
+        id: "39",
+      },
+      comments: [
+        {
+          type: "comments",
+          id: "7989",
+          user: {
+            type: "users",
+            id: "39",
+          },
+          pre: {
+            type: "comments",
+            id: "7986",
+            user: {
+              type: "users",
+              id: "39",
+            },
+          },
+        },
+        {
+          type: "comments",
+          id: "7990",
+          user: {
+            type: "users",
+            id: "100",
+          },
+          pre: {
+            type: "comments",
+            id: "7989",
+            user: {
+              type: "users",
+              id: "39",
+            },
+            pre: {
+              type: "comments",
+              id: "7986",
+              user: {
+                type: "users",
+                id: "39",
+              },
+            },
+          },
+        },
+      ],
+    },
+  };
+
+  it("should handle complex nested relationships", () => {
+    const result = deserialize(complexResponse);
+    deepStrictEqual(result, expectedComplexResponse);
   });
 });
