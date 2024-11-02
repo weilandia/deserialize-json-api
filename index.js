@@ -28,12 +28,15 @@ const transformKeys = (obj, transformFunc) => {
 
 /**
  * Finds an included resource by type and id.
- * @param {Array} included - The array of included resources.
+ * @param {Array|undefined} included - The array of included resources.
  * @param {string} type - The type of the resource to find.
  * @param {string} id - The id of the resource to find.
  * @returns {Object|undefined} The found resource or undefined.
  */
 const findIncluded = (included, type, id) => {
+  if (!(Array.isArray(included))) {
+    return
+  }
   return included.find(item => item.type === type && item.id === id);
 };
 
