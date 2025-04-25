@@ -39,6 +39,7 @@ const resp = {
       director: {
         data: { id: 1, type: "person" },
       },
+      studio: {}
     },
     links: {
       self: "/movies/1",

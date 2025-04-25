@@ -59,6 +59,7 @@ const deserializeResource = (resource, included, transformFunc) => {
 
   Object.keys(relationships).forEach(key => {
     const relationship = relationships[key].data;
+    if (!relationship) return;
     if (Array.isArray(relationship)) {
       deserialized[transformFunc ? transformFunc(key) : key] = relationship.map(rel => {
         const includedResource = findIncluded(included, rel.type, rel.id);
